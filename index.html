@@ -62,18 +62,113 @@
 		</div>
 
 		<script src="js/util.js"></script>
+		<script src="js/vue.min.js"></script>
 		<script type="text/javascript">
 			(function() {
 				//Vue数据
 				var data_movies = new Vue({
 					el: '#movies',
 					data: {
-						movies: [{title:'1'}]
+						movies: [{
+							title: '1'
+						}]
 					}
 				});
 				mui.init({
 					swipeBack: true //启用右滑关闭功能
 				});
+				
+				refreshData()
+				//刷新数据，重新调用接口
+				function refreshData() {
+					//请求热映列表接口
+					mui.getJSON('https://api.douban.com/v2/movie/in_theaters', {
+						start: 0,
+						count: 10
+					}, function(resp) {
+						data_movies.movies.splice(0, data_movies.movies.length);
+						data_movies.movies = data_movies.movies.concat(convert(resp.subjects));
+						//					mui('#refreshContainer').pullRefresh().endPulldownToRefresh();
+						//					mui('#refreshContainer').pullRefresh().refresh(true);
+					});
+				}
+				//请求下一页数据
+				function loadMoreData() {
+					//请求热映列表接口
+					mui.getJSON('https://api.douban.com/v2/movie/in_theaters', {
+						start: data_movies.movies.length,
+						count: 10
+					}, function(resp) {
+						data_movies.movies = data_movies.movies.concat(convert(resp.subjects));
+						mui('#refreshContainer').pullRefresh().endPullupToRefresh(data_movies.movies.length > resp.total);
+					});
+				}
+				//给搜索框添加点击事件
+				mui('.wrap-search')[0].addEventListener('tap', function() {
+					mui.openWindow({
+						id: 'search',
+						url: './html/search.html'
+					});
+				});
+
+				mui('.mui-scroll-wrapper').scroll({
+					indicators: false
+				});
+
+				//预加载电影详情页面
+				var detailPage = mui.preload({
+					id: 'movie-detail',
+					url: './html/movie-detail.html'
+				});
+
+				//打开电影详情页面
+				function open_detail(item) {
+					//触发详情页面的movieId事件
+					mui.fire(detailPage, 'movieId', {
+						id: item.id
+					});
+					//打开
+					mui.openWindow({
+						id: 'movie-detail'
+					});
+				}
+
+				//数据转换
+				function convert(items) {
+					var newItems = [];
+					//遍历items
+					items.forEach(function(item) {
+						var genres = item.genres.toString().replace(/,/g, ' / ');
+						//导演
+						var directors = '';
+						for(var i = 0; i < item.directors.length; i++) {
+							directors += item.directors[i].name;
+							if(i != item.directors.length - 1) {
+								directors += ' / ';
+							}
+						}
+						//演员
+						var casts = '';
+						for(var i = 0; i < item.casts.length; i++) {
+							casts += item.casts[i].name;
+							if(i != item.casts.length - 1) {
+								casts += ' / ';
+							}
+						}
+
+						newItems.push({
+							id: item.id,
+							title: item.title,
+							genres: genres,
+							cover: item.images.large,
+							score: item.rating.average,
+							directors: directors,
+							casts: casts
+						});
+					});
+
+					return newItems;
+				}
 				mui.plusReady(function() {
 					var self = plus.webview.currentWebview();
 
@@ -123,11 +218,8 @@
 						}
 					});
 				});
+
 			})();
-			//			添加点击事件
-			mui('.wrap-search')[0].addEventListener('tap', function() {
-				console.log('click...')
-			})
 		</script>
 	</body>
 
