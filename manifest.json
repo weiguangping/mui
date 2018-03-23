@@ -347,7 +347,8 @@
 				"refer": [
 					"html/tab-webview-subpage-contact.html",
 					"html/new-webview.html",
-					"html/main-setting.html"
+					"html/main-setting.html",
+					"html/search.html"
 				],
 				"priority": 0
 			},
@@ -407,6 +408,13 @@
 					"fonts/mui.ttf"
 				],
 				"refer": [],
+				"priority": 0
+			},
+			"html/main-setting.html": {
+				"resources": [],
+				"refer": [
+					"html/about.html"
+				],
 				"priority": 0
 			}
 		},

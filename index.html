@@ -39,7 +39,7 @@
 			<div id="refreshContainer" class="mui-scroll-wrapper" style="top: 50px;">
 				<div class="mui-scroll">
 					<ul id="movies" class="mui-table-view">
-						<li class="mui-table-view-cell" v-for="item in movies" @tap="open_detail(item)">
+						<!--<li class="mui-table-view-cell" v-for="item in movies" @tap="open_detail(item)">
 							<img class="mui-pull-left item-img" :src="item.cover" />
 							<div class="mui-ellipsis dark-big">
 								{{item.title}}
@@ -55,7 +55,58 @@
 							<div class="mui-ellipsis gray-small">
 								主演：{{item.casts}}
 							</div>
-						</li>
+						</li>-->
+						<li>1111</li>
+						<li>1111</li>
+						<li>1111</li>
+						<li>1111</li>
+						<li>1111</li>
+						<li>1111</li>
+						<li>1111</li>
+						<li>1111</li>
+						<li>1111</li>
+						<li>1111</li>
+						<li>1111</li>
+						<li>1111</li>
+						<li>1111</li>
+						<li>1111</li>
+						<li>1111</li>
+						<li>1111</li>
+						<li>1111</li>
+						<li>1111</li>
+						<li>1111</li>
+						<li>1111</li>
+						<li>1111</li>
+						<li>1111</li>
+						<li>1111</li>
+						<li>1111</li>
+						<li>1111</li>
+						<li>1111</li>
+						<li>1111</li>
+						<li>1111</li>
+						<li>1111</li>
+						<li>1111</li>
+						<li>1111</li>
+						<li>1111</li>
+						<li>222222</li>
+						<li>222222</li>
+						<li>222222</li>
+						<li>222222</li>
+						<li>222222</li>
+						<li>222222</li>
+						<li>222222</li>
+						<li>222222</li>
+						<li>222222</li>
+						<li>222222</li>
+						<li>222222</li>
+						<li>222222</li>
+						<li>222222</li>
+						<li>222222</li>
+						<li>222222</li>
+						<li>222222</li>
+						<li>222222</li>
+						<li>222222</li>
+						<li>222222</li>
 					</ul>
 				</div>
 			</div>
@@ -69,27 +120,39 @@
 				var data_movies = new Vue({
 					el: '#movies',
 					data: {
-						movies: [{
-							title: '1'
-						}]
+						movies: []
 					}
 				});
+				var aniShow = {};
 				mui.init({
-					swipeBack: true //启用右滑关闭功能
+					swipeBack: true, //启用右滑关闭功能
+					pullRefresh: {
+						container: "#refreshContainer", //下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
+						down: {
+							style:'circle',
+							auto: true, //可选,默认false.首次加载自动下拉刷新一次
+							callback: refreshData //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+						},
+						up: {
+//							height: 50, //可选.默认50.触发上拉加载拖动距离
+//							auto: true, //可选,默认false.自动上拉加载一次
+//							contentrefresh: "正在加载...", //可选，正在加载状态时，上拉加载控件上显示的标题内容
+//							contentnomore: '没有更多数据了', //可选，请求完毕若没有更多数据时显示的提醒内容；
+//							callback: loadMoreData //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+						}
+					}
 				});
-				
-				refreshData()
 				//刷新数据，重新调用接口
 				function refreshData() {
 					//请求热映列表接口
 					mui.getJSON('https://api.douban.com/v2/movie/in_theaters', {
 						start: 0,
-						count: 10
+						count: 15
 					}, function(resp) {
 						data_movies.movies.splice(0, data_movies.movies.length);
 						data_movies.movies = data_movies.movies.concat(convert(resp.subjects));
-						//					mui('#refreshContainer').pullRefresh().endPulldownToRefresh();
-						//					mui('#refreshContainer').pullRefresh().refresh(true);
+						mui('#refreshContainer').pullRefresh().endPulldownToRefresh();
+						mui('#refreshContainer').pullRefresh().refresh(true);
 					});
 				}
 				//请求下一页数据
@@ -112,7 +175,8 @@
 				});
 
 				mui('.mui-scroll-wrapper').scroll({
-					indicators: false
+					indicators: false,
+					scrollY: true
 				});
 
 				//预加载电影详情页面

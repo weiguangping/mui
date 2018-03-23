@@ -17,7 +17,8 @@
 			"html/tab-webview-subpage-about.html",
 			"html/new-webview.html",
 			"html/main-setting.html",
-			"html/main-billboard.html"
+			"html/main-billboard.html",
+			"html/search.html"
 		]
 	},
 	"launch.html": {
@@ -72,5 +73,10 @@
 			"fonts/mui.ttf"
 		],
 		"refer": []
+	},
+	"html/main-setting.html": {
+		"refer": [
+			"html/about.html"
+		]
 	}
 }
