@@ -117,12 +117,12 @@
 					"styles": {
 						"bottom": "0px",
 						"left": "0",
-						"height": "50px",
+						"height": "52px",
 						"width": "100%",
 						"backgroundColor": "#f7f7f7"
 					},
 					"tags": [
-						{
+						 {
 							"tag": "font",
 							"id": "indexIcon",
 							"text": "\ue500",
@@ -151,7 +151,7 @@
 								"align": "center",
 								"size": "10px"
 							}
-						},{
+						}, {
 							"tag": "font",
 							"id": "newsIcon",
 							"text": "\ue466",
@@ -180,7 +180,7 @@
 								"align": "center",
 								"size": "10px"
 							}
-						},{
+						}, {
 							"tag": "font",
 							"id": "contactIcon",
 							"text": "\ue502",
@@ -207,9 +207,23 @@
 							},
 							"textStyles": {
 								"align": "center",
-								"size": "10px"
+								"size": "10px",
+								"backgroundColor":"red"
 							}
 						}
+					]
+				},
+				{
+					"id": "tabBar",
+					"styles": {
+						"bottom": "52px",
+						"left": "0",
+						"height": "1px",
+						"width": "100%",
+						"backgroundColor": "#ccc"
+					},
+					"tags": [
+						 
 					]
 				}
 			]
@@ -348,7 +362,9 @@
 					"html/tab-webview-subpage-contact.html",
 					"html/new-webview.html",
 					"html/main-setting.html",
-					"html/search.html"
+					"html/search.html",
+					"html/home.html",
+					"html/movie-detail.html"
 				],
 				"priority": 0
 			},
@@ -414,6 +430,35 @@
 				"resources": [],
 				"refer": [
 					"html/about.html"
+				],
+				"priority": 0
+			},
+			"html/billboard-top.html": {
+				"resources": [],
+				"refer": [
+					"html/movie-detail.html"
+				],
+				"priority": 0
+			},
+			"html/main-billboard.html": {
+				"resources": [],
+				"refer": [
+					"html/billboard-top.html",
+					"html/billboard-box.html"
+				],
+				"priority": 0
+			},
+			"html/billboard-box.html": {
+				"resources": [],
+				"refer": [
+					"html/movie-detail.html"
+				],
+				"priority": 0
+			},
+			"html/movie-detail.html": {
+				"resources": [],
+				"refer": [
+					"html/cast-detail.html"
 				],
 				"priority": 0
 			}

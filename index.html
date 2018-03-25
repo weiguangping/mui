@@ -12,12 +12,27 @@
 			html,
 			body {
 				background-color: #fff;
+				width: 100%;
+				height: 100%;
 			}
 			
 			.wrap-search {
-				margin: 15px;
+				padding: 15px;
+				height: 60px;
+				text-align: center;
+				position: fixed;
+				top: 0;
+				left: 0;
+				box-sizing: border-box;
+				width: 100%;
+				z-index: 9999;
+				background: white;
+			}
+			
+			.wrap-search .search {
 				background: #E6E6E6;
 				height: 30px;
+				margin: 0 15px;
 				border-radius: 5px;
 				text-align: center;
 			}
@@ -31,15 +46,17 @@
 	</head>
 
 	<body>
-		<div class="mui-content" style="background: white;">
+		<div class="mui-content" style="background: white;width: 100%;height: 100%;">
 			<div class="wrap-search">
-				<span class="mui-icon mui-icon-search" style="line-height: 30px;color: #AAAAAA;font-size: 16px;"></span>
-				<span style="line-height: 30px;color: #AAAAAA;font-size: 14px;">电影/电视剧/影人</span>
+				<div class="search">
+					<span class="mui-icon mui-icon-search" style="line-height: 30px;color: #AAAAAA;font-size: 16px;"></span>
+					<span style="line-height: 30px;color: #AAAAAA;font-size: 14px;">电影/电视剧/影人</span>
+				</div>
 			</div>
-			<div id="refreshContainer" class="mui-scroll-wrapper" style="top: 50px;">
+			<div id="refreshContainer" class="mui-scroll-wrapper" style="padding-top: 50px;padding-bottom: 45px;">
 				<div class="mui-scroll">
 					<ul id="movies" class="mui-table-view">
-						<!--<li class="mui-table-view-cell" v-for="item in movies" @tap="open_detail(item)">
+						<li class="mui-table-view-cell" v-for="item in movies" :data-id="item.id">
 							<img class="mui-pull-left item-img" :src="item.cover" />
 							<div class="mui-ellipsis dark-big">
 								{{item.title}}
@@ -55,58 +72,7 @@
 							<div class="mui-ellipsis gray-small">
 								主演：{{item.casts}}
 							</div>
-						</li>-->
-						<li>1111</li>
-						<li>1111</li>
-						<li>1111</li>
-						<li>1111</li>
-						<li>1111</li>
-						<li>1111</li>
-						<li>1111</li>
-						<li>1111</li>
-						<li>1111</li>
-						<li>1111</li>
-						<li>1111</li>
-						<li>1111</li>
-						<li>1111</li>
-						<li>1111</li>
-						<li>1111</li>
-						<li>1111</li>
-						<li>1111</li>
-						<li>1111</li>
-						<li>1111</li>
-						<li>1111</li>
-						<li>1111</li>
-						<li>1111</li>
-						<li>1111</li>
-						<li>1111</li>
-						<li>1111</li>
-						<li>1111</li>
-						<li>1111</li>
-						<li>1111</li>
-						<li>1111</li>
-						<li>1111</li>
-						<li>1111</li>
-						<li>1111</li>
-						<li>222222</li>
-						<li>222222</li>
-						<li>222222</li>
-						<li>222222</li>
-						<li>222222</li>
-						<li>222222</li>
-						<li>222222</li>
-						<li>222222</li>
-						<li>222222</li>
-						<li>222222</li>
-						<li>222222</li>
-						<li>222222</li>
-						<li>222222</li>
-						<li>222222</li>
-						<li>222222</li>
-						<li>222222</li>
-						<li>222222</li>
-						<li>222222</li>
-						<li>222222</li>
+						</li>
 					</ul>
 				</div>
 			</div>
@@ -129,18 +95,22 @@
 					pullRefresh: {
 						container: "#refreshContainer", //下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
 						down: {
-							style:'circle',
-							auto: true, //可选,默认false.首次加载自动下拉刷新一次
+							style: 'circle',
+							auto: false, //可选,默认false.首次加载自动下拉刷新一次
 							callback: refreshData //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
 						},
 						up: {
-//							height: 50, //可选.默认50.触发上拉加载拖动距离
-//							auto: true, //可选,默认false.自动上拉加载一次
-//							contentrefresh: "正在加载...", //可选，正在加载状态时，上拉加载控件上显示的标题内容
-//							contentnomore: '没有更多数据了', //可选，请求完毕若没有更多数据时显示的提醒内容；
-//							callback: loadMoreData //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+							height: 50, //可选.默认50.触发上拉加载拖动距离
+							auto: true, //可选,默认false.自动上拉加载一次
+							contentrefresh: "正在加载...", //可选，正在加载状态时，上拉加载控件上显示的标题内容
+							contentnomore: '没有更多数据了', //可选，请求完毕若没有更多数据时显示的提醒内容；
+							callback: loadMoreData //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
 						}
-					}
+					},
+					preloadPages: [{
+						id: 'movie-detail',
+						url: './html/movie-detail.html'
+					}]
 				});
 				//刷新数据，重新调用接口
 				function refreshData() {
@@ -162,6 +132,7 @@
 						start: data_movies.movies.length,
 						count: 10
 					}, function(resp) {
+						console.log(JSON.stringify(resp))
 						data_movies.movies = data_movies.movies.concat(convert(resp.subjects));
 						mui('#refreshContainer').pullRefresh().endPullupToRefresh(data_movies.movies.length > resp.total);
 					});
@@ -173,29 +144,27 @@
 						url: './html/search.html'
 					});
 				});
-
-				mui('.mui-scroll-wrapper').scroll({
-					indicators: false,
-					scrollY: true
-				});
+				//				mui('.mui-scroll-wrapper').scroll({
+				//					indicators: false,
+				//					scrollY: true
+				//				});
 
 				//预加载电影详情页面
-				var detailPage = mui.preload({
-					id: 'movie-detail',
-					url: './html/movie-detail.html'
-				});
-
-				//打开电影详情页面
-				function open_detail(item) {
-					//触发详情页面的movieId事件
-					mui.fire(detailPage, 'movieId', {
-						id: item.id
-					});
-					//打开
-					mui.openWindow({
-						id: 'movie-detail'
-					});
-				}
+				//				var detailPage = mui.preload({
+				//					id: 'movie-detail',
+				//					url: './html/movie-detail.html'
+				//				});
+//				var detailPage = plus.webview.getWebviewById('movie-detail');
+//				mui("#refreshContainer").on('tap', '.mui-table-view-cell', function(item) {
+//					var id = this.getAttribute("data-id");
+//					mui.fire(detailPage, 'movieId', {
+//						id: id
+//					});
+//					//打开
+//					mui.openWindow({
+//						id: 'movie-detail'
+//					});
+//				})
 
 				//数据转换
 				function convert(items) {
@@ -281,8 +250,22 @@
 							activePage = targetPage;
 						}
 					});
+					var detailPage = mui.preload({
+						id: 'movie-detail',
+						url: './html/movie-detail.html'
+					});
+					//				var detailPage = plus.webview.getWebviewById('movie-detail');
+					mui("#refreshContainer").on('tap', '.mui-table-view-cell', function(item) {
+						var id = this.getAttribute("data-id");
+						mui.fire(detailPage, 'movieId', {
+							id: id
+						});
+						//打开
+						mui.openWindow({
+							id: 'movie-detail'
+						});
+					})
 				});
-
 			})();
 		</script>
 	</body>

@@ -130,75 +130,84 @@
 		<script type="text/javascript">
 			mui.init();
 			//默认数据
-			function getDefaultData(){
-				return{
-					title:'',
-					cover:'',
-					score:'',
-					ratingCount:'',
-					summary:'',
-					countries:'',
-					year:'',
-					genres:'',
-					casts:[],
-					directors:[]
+			function getDefaultData() {
+				return {
+					title: '',
+					cover: '',
+					score: '',
+					ratingCount: '',
+					summary: '',
+					countries: '',
+					year: '',
+					genres: '',
+					casts: [],
+					directors: []
 				}
 			}
 			//vue对象
 			var data_detail = new Vue({
-				el:'#content',
-				data:getDefaultData(),
-				methods:{
-					resetData:function(){//重置数据
-						Object.assign(this.$data,getDefaultData());
+				el: '#content',
+				data: getDefaultData(),
+				methods: {
+					resetData: function() { //重置数据
+						//						Object.assign(this.$data,getDefaultData());
+						this.title='';
+						this.cover='';
+						this.score='';
+						this.ratingCount='';
+						this.summary='';
+						this.summary='';
+						this.countries='';
+						this.year='';
+						this.genres='';
+						this.casts='';
+						this.directors='';
 					},
-					open_detail:function(item){
+					open_detail: function(item) {
 						//打开演员详情页面
 						mui.openWindow({
-							id:'cast-detail',
-							url:'./cast-detail.html',
-							extras:{
-								castId:item.id
+							id: 'cast-detail',
+							url: './cast-detail.html',
+							extras: {
+								castId: item.id
 							}
 						});
 					}
 				}
 			});
-			
-			mui.plusReady(function(){
+
+			mui.plusReady(function() {
 				var self = plus.webview.currentWebview();
 				//添加hide事件，清空页面数据，滚到最顶部
-				self.addEventListener('hide',function(e){
-					window.scrollTo(0,0);
+				self.addEventListener('hide', function(e) {
+					window.scrollTo(0, 0);
 					data_detail.resetData();
-				},false);
+				}, false);
 			})
-			
+
 			//添加movieId自定义事件
 			window.addEventListener("movieId", function(event) {
 				//获取事件参数
 				var id = event.detail.id;
-				plus.nativeUI.showWaiting('加载中',{
-					width:'100px',
-					height:'100px'
+				plus.nativeUI.showWaiting('加载中', {
+					width: '100px',
+					height: '100px'
 				});
 				//根据id请求电影详情数据
-				mui.getJSON('http://api.douban.com/v2/movie/subject/'+id,function(resp){
+				mui.getJSON('http://api.douban.com/v2/movie/subject/' + id, function(resp) {
 					data_detail.title = resp.title;
 					data_detail.cover = resp.images.large;
 					data_detail.score = resp.rating.average;
 					data_detail.ratingCount = resp.ratings_count;
 					data_detail.summary = resp.summary;
-					data_detail.countries = resp.countries.toString('/,/g',' / ');
+					data_detail.countries = resp.countries.toString('/,/g', ' / ');
 					data_detail.year = resp.year;
-					data_detail.genres = resp.genres.toString('/,/g',' / ');
+					data_detail.genres = resp.genres.toString('/,/g', ' / ');
 					data_detail.casts = resp.casts;
 					data_detail.directors = resp.directors;
 					plus.nativeUI.closeWaiting();
 				})
 			});
-			
-			
 		</script>
 	</body>
 
