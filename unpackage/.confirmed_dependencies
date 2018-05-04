@@ -104,6 +104,12 @@
   "html/movie-detail.html": {
     "refer": [
       "html/cast-detail.html"
+    ],
+    "resources": []
+  },
+  "html/search.html": {
+    "refer": [
+      "html/search-result.html"
     ]
   }
 }
